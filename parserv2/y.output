@@ -1,0 +1,136 @@
+state 0 //
+
+    0 $accept: . main
+
+    D  shift, and goto state 4
+
+    area   goto state 3
+    main   goto state 1
+    phone  goto state 2
+
+state 1 // D D D D D D D D D D [$end]
+
+    0 $accept: main .  [$end]
+
+    $end  accept
+
+state 2 // D D D D D D D D D D [$end]
+
+    1 main: phone .  [$end]
+
+    $end  reduce using rule 1 (main)
+
+state 3 // D D D ['-']
+
+    2 phone: area . part1 part2
+    3 phone: area . '-' part1 '-' part2
+
+    '-'  shift, and goto state 8
+    D    shift, and goto state 9
+
+    part1  goto state 7
+
+state 4 // D
+
+    4 area: D . D D
+
+    D  shift, and goto state 5
+
+state 5 // D D
+
+    4 area: D D . D
+
+    D  shift, and goto state 6
+
+state 6 // D D D
+
+    4 area: D D D .  ['-', D]
+
+    '-'  reduce using rule 4 (area)
+    D    reduce using rule 4 (area)
+
+state 7 // D D D D D D [D]
+
+    2 phone: area part1 . part2
+
+    D  shift, and goto state 15
+
+    part2  goto state 19
+
+state 8 // D D D '-'
+
+    3 phone: area '-' . part1 '-' part2
+
+    D  shift, and goto state 9
+
+    part1  goto state 12
+
+state 9 // D D D D
+
+    5 part1: D . D D
+
+    D  shift, and goto state 10
+
+state 10 // D D D D D
+
+    5 part1: D D . D
+
+    D  shift, and goto state 11
+
+state 11 // D D D D D D
+
+    5 part1: D D D .  ['-', D]
+
+    '-'  reduce using rule 5 (part1)
+    D    reduce using rule 5 (part1)
+
+state 12 // D D D '-' D D D ['-']
+
+    3 phone: area '-' part1 . '-' part2
+
+    '-'  shift, and goto state 13
+
+state 13 // D D D '-' D D D '-'
+
+    3 phone: area '-' part1 '-' . part2
+
+    D  shift, and goto state 15
+
+    part2  goto state 14
+
+state 14 // D D D '-' D D D '-' D D D D [$end]
+
+    3 phone: area '-' part1 '-' part2 .  [$end]
+
+    $end  reduce using rule 3 (phone)
+
+state 15 // D D D D D D D
+
+    6 part2: D . D D D
+
+    D  shift, and goto state 16
+
+state 16 // D D D D D D D D
+
+    6 part2: D D . D D
+
+    D  shift, and goto state 17
+
+state 17 // D D D D D D D D D
+
+    6 part2: D D D . D
+
+    D  shift, and goto state 18
+
+state 18 // D D D D D D D D D D
+
+    6 part2: D D D D .  [$end]
+
+    $end  reduce using rule 6 (part2)
+
+state 19 // D D D D D D D D D D [$end]
+
+    2 phone: area part1 part2 .  [$end]
+
+    $end  reduce using rule 2 (phone)
+
